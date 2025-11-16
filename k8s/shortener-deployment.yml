@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shortener-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shortener-service
+  template:
+    metadata:
+      labels:
+        app: shortener-service
+    spec:
+      containers:
+        - name: shortener-service
+          image: shortener-service:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIRECT_BASE_URL
+              value: "http://redirect-service:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shortener-service
+spec:
+  selector:
+    app: shortener-service
+  ports:
+    - port: 9090
+      targetPort: 8080
+      nodePort: 30080
+  type: NodePort

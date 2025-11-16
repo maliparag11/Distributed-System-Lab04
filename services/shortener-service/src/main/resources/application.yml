@@ -1,0 +1,5 @@
+server:
+  port: 8080
+
+redirect:
+  base-url: http://redirect-service:8080
